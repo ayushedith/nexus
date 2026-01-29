@@ -1,0 +1,44 @@
+name: GraphQL Example
+baseUrl: https://graphql-pokemon2.vercel.app
+environment:
+  dev:
+    baseUrl: http://localhost:4000/graphql
+
+requests:
+  - name: Get Pokemon
+    method: POST
+    url: "{{baseUrl}}"
+    headers:
+      Content-Type: application/json
+    body:
+      query: |
+        query {
+          pokemon(name: "Pikachu") {
+            id
+            number
+            name
+            types
+            maxHP
+            maxCP
+          }
+        }
+    tests:
+      - status == 200
+      - response.time < 2000
+
+  - name: Get Multiple Pokemon
+    method: POST
+    url: "{{baseUrl}}"
+    headers:
+      Content-Type: application/json
+    body:
+      query: |
+        query {
+          pokemons(first: 10) {
+            id
+            name
+            types
+          }
+        }
+    tests:
+      - status == 200

@@ -1,0 +1,72 @@
+name: REST API Example
+baseUrl: https://jsonplaceholder.typicode.com
+environment:
+  dev:
+    baseUrl: http://localhost:3000
+    token: dev-secret-token
+  staging:
+    baseUrl: https://staging-api.example.com
+    token: staging-secret-token
+  prod:
+    baseUrl: https://jsonplaceholder.typicode.com
+    token: prod-secret-token
+
+requests:
+  - name: Get All Posts
+    method: GET
+    url: "{{baseUrl}}/posts"
+    headers:
+      Accept: application/json
+    tests:
+      - status == 200
+      - body.length > 0
+
+  - name: Get Single Post
+    method: GET
+    url: "{{baseUrl}}/posts/1"
+    headers:
+      Accept: application/json
+    assertions:
+      - status == 200
+      - response.time < 1000
+
+  - name: Create Post
+    method: POST
+    url: "{{baseUrl}}/posts"
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    body:
+      title: "{{$randomName}}'s Post"
+      body: "This is a test post created at {{$timestamp}}"
+      userId: 1
+    tests:
+      - status == 201
+
+  - name: Update Post
+    method: PUT
+    url: "{{baseUrl}}/posts/1"
+    headers:
+      Content-Type: application/json
+    body:
+      id: 1
+      title: Updated Title
+      body: Updated body content
+      userId: 1
+    tests:
+      - status == 200
+
+  - name: Delete Post
+    method: DELETE
+    url: "{{baseUrl}}/posts/1"
+    tests:
+      - status == 200
+
+  - name: Get User Posts
+    method: GET
+    url: "{{baseUrl}}/posts"
+    queryParams:
+      userId: "1"
+    tests:
+      - status == 200
+      - body.length > 0

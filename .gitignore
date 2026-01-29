@@ -1,0 +1,6 @@
+.nexus/
+.env
+*.log
+secrets/
+go.sum
+bin

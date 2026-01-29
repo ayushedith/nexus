@@ -1,0 +1,42 @@
+name: Mock Server Example
+baseUrl: http://localhost:9999
+environment:
+  dev:
+    baseUrl: http://localhost:9999
+
+requests:
+  - name: Health Check
+    method: GET
+    url: "{{baseUrl}}/health"
+    tests:
+      - status == 200
+
+  - name: Get Users
+    method: GET
+    url: "{{baseUrl}}/api/users"
+    headers:
+      Accept: application/json
+    tests:
+      - status == 200
+
+  - name: Create User
+    method: POST
+    url: "{{baseUrl}}/api/users"
+    headers:
+      Content-Type: application/json
+    body:
+      name: "{{$randomName}}"
+      email: "{{$randomEmail}}"
+    tests:
+      - status == 201
+
+  - name: Echo Request
+    method: POST
+    url: "{{baseUrl}}/echo"
+    headers:
+      Content-Type: application/json
+    body:
+      message: "Hello from NEXUS-API"
+      timestamp: "{{$timestamp}}"
+    tests:
+      - status == 200

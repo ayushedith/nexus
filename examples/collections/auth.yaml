@@ -1,0 +1,47 @@
+name: Authentication Example
+baseUrl: https://reqres.in/api
+environment:
+  dev:
+    baseUrl: http://localhost:8080/api
+
+requests:
+  - name: Register User
+    method: POST
+    url: "{{baseUrl}}/register"
+    headers:
+      Content-Type: application/json
+    body:
+      email: "eve.holt@reqres.in"
+      password: "pistol"
+    tests:
+      - status == 200
+
+  - name: Login
+    method: POST
+    url: "{{baseUrl}}/login"
+    headers:
+      Content-Type: application/json
+    body:
+      email: "eve.holt@reqres.in"
+      password: "cityslicka"
+    tests:
+      - status == 200
+
+  - name: Get Users with Bearer Auth
+    method: GET
+    url: "{{baseUrl}}/users"
+    headers:
+      Authorization: "Bearer {{token}}"
+    tests:
+      - status == 200
+
+  - name: Create User
+    method: POST
+    url: "{{baseUrl}}/users"
+    headers:
+      Content-Type: application/json
+    body:
+      name: "{{$randomName}}"
+      job: "Software Engineer"
+    tests:
+      - status == 201
