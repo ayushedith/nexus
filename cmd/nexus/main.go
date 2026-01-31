@@ -36,6 +36,8 @@ func main() {
 		runMockServer()
 	case "collab":
 		runCollabServer()
+	case "server":
+		runAPIServer()
 	case "ai":
 		runAI()
 	default:
@@ -250,6 +252,38 @@ func runCollabServer() {
 	fmt.Println("Connect with: ?room=<room-id>")
 
 	if err := http.ListenAndServe(addr, nil); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func runAPIServer() {
+	port := "8080"
+	if len(os.Args) > 2 {
+		port = os.Args[2]
+	}
+
+	apiKey := os.Getenv("OPENAI_API_KEY")
+	for i, arg := range os.Args {
+		if arg == "--api-key" && i+1 < len(os.Args) {
+			apiKey = os.Args[i+1]
+			break
+		}
+	}
+
+	server, err := api.NewAPIServer(".", getEnv(), apiKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	mux := http.NewServeMux()
+	server.RegisterRoutes(mux)
+
+	// Serve static web assets if present
+	mux.Handle("/", http.FileServer(http.Dir("web/dist")))
+
+	addr := ":" + port
+	fmt.Printf("Starting API server on %s\n", addr)
+	if err := http.ListenAndServe(addr, mux); err != nil {
 		log.Fatal(err)
 	}
 }
