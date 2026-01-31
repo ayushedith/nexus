@@ -1,0 +1,9 @@
+name: Demo API
+baseUrl: http://localhost:9999
+
+requests:
+  - name: Health
+    method: GET
+    url: "{{baseUrl}}/health"
+    tests:
+      - status == 200

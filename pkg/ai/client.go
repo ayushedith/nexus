@@ -87,6 +87,12 @@ Return only the JSON, no explanation.`, schema)
 	return c.Generate(ctx, "llama2", prompt)
 }
 
+// CreateMessage implements AIClient.CreateMessage for local LLM adapters.
+func (c *Client) CreateMessage(ctx context.Context, prompt string, maxTokens int) (string, error) {
+	// The local adapter uses a simple generate endpoint; ignore maxTokens for now.
+	return c.Generate(ctx, "llama2", prompt)
+}
+
 func (c *Client) GenerateTests(ctx context.Context, apiSpec string) ([]string, error) {
 	prompt := fmt.Sprintf(`Generate test assertions for this API endpoint:
 
