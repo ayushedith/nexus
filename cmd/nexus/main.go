@@ -286,8 +286,10 @@ func runAI() {
 
 	client := ai.NewOpenAIClient(apiKey)
 
-	if !client.IsConfigured() {
-		fmt.Println(client.GetSetupInstructions())
+	var aiClient ai.AIClient = client
+
+	if !aiClient.IsConfigured() {
+		fmt.Println(aiClient.GetSetupInstructions())
 		os.Exit(1)
 	}
 
@@ -311,7 +313,7 @@ func runAI() {
 	}
 }
 
-func aiGenerateBody(ctx context.Context, client *ai.OpenAIClient) {
+func aiGenerateBody(ctx context.Context, client ai.AIClient) {
 	if len(os.Args) < 4 {
 		fmt.Println("Usage: nexus ai generate-body <schema>")
 		os.Exit(1)
@@ -329,7 +331,7 @@ func aiGenerateBody(ctx context.Context, client *ai.OpenAIClient) {
 	fmt.Println(body)
 }
 
-func aiGenerateTests(ctx context.Context, client *ai.OpenAIClient) {
+func aiGenerateTests(ctx context.Context, client ai.AIClient) {
 	if len(os.Args) < 4 {
 		fmt.Println("Usage: nexus ai generate-tests <spec>")
 		os.Exit(1)
@@ -349,7 +351,7 @@ func aiGenerateTests(ctx context.Context, client *ai.OpenAIClient) {
 	}
 }
 
-func aiOptimize(ctx context.Context, client *ai.OpenAIClient) {
+func aiOptimize(ctx context.Context, client ai.AIClient) {
 	if len(os.Args) < 4 {
 		fmt.Println("Usage: nexus ai optimize <request-info>")
 		os.Exit(1)
@@ -369,7 +371,7 @@ func aiOptimize(ctx context.Context, client *ai.OpenAIClient) {
 	}
 }
 
-func aiFromDescription(ctx context.Context, client *ai.OpenAIClient) {
+func aiFromDescription(ctx context.Context, client ai.AIClient) {
 	if len(os.Args) < 4 {
 		fmt.Println("Usage: nexus ai from-description <description>")
 		os.Exit(1)
@@ -387,7 +389,7 @@ func aiFromDescription(ctx context.Context, client *ai.OpenAIClient) {
 	fmt.Println(collection)
 }
 
-func aiAnalyzeChanges(ctx context.Context, client *ai.OpenAIClient) {
+func aiAnalyzeChanges(ctx context.Context, client ai.AIClient) {
 	if len(os.Args) < 5 {
 		fmt.Println("Usage: nexus ai analyze-changes <old-spec> <new-spec>")
 		os.Exit(1)
