@@ -5,30 +5,75 @@
   --accent:#7c3aed;
 }
 
-.landing-root{font-family:Inter,ui-sans-serif,system-ui, -apple-system, 'Segoe UI', Roboto; color:#e6eef6; background: linear-gradient(180deg, #071025 0%, #071629 60%); min-height:100vh}
-.container{max-width:1100px;margin:0 auto;padding:40px 20px}
+/* Import two font combos and a mono font for code */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Roboto:wght@300;400;700&family=JetBrains+Mono:wght@400;600&display=swap');
 
-.hero{padding:80px 0}
+/* Font combo variables
+   Combo 1: Poppins (headings) + Inter (body)
+   Combo 2: Montserrat (headings) + Roboto (body)
+*/
+:root{
+  --font-heading-1: 'Poppins', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-body-1: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-heading-2: 'Montserrat', Roboto, system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --font-body-2: 'Roboto', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+}
+
+/* Utility classes to switch combos */
+.font-combo-1 { --font-heading: var(--font-heading-1); --font-body: var(--font-body-1); }
+.font-combo-2 { --font-heading: var(--font-heading-2); --font-body: var(--font-body-2); }
+
+
+
+.landing-root{
+  font-family: var(--font-body, Inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto;
+  color:#e6eef6;
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,0.12), transparent 12%),
+              linear-gradient(180deg,#071025 0%, #071629 100%);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+.container{max-width:1200px;margin:0 auto;padding:56px 20px}
+
+.hero{padding:48px 0}
 .hero-inner{display:flex;gap:48px;align-items:center;justify-content:space-between}
-.hero-copy h1{font-size:48px;margin:0 0 12px}
-.tagline{color:var(--muted);margin:0 0 20px}
+.hero-copy{flex:1;min-width:0}
+.hero-copy h1{font-family:var(--font-heading, 'Poppins', Inter);font-size:48px;line-height:1.02;margin:0 0 10px;font-weight:700}
+.tagline{color:var(--muted);margin:0 0 20px;font-size:18px}
 .cta{display:flex;gap:12px}
-.btn{padding:10px 16px;border-radius:8px;text-decoration:none;color:inherit;border:1px solid rgba(255,255,255,0.06)}
-.btn.primary{background:linear-gradient(90deg,var(--accent),#5b21b6);box-shadow:0 6px 18px rgba(124,58,237,0.18)}
-.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+.btn{padding:12px 18px;border-radius:10px;text-decoration:none;color:#fff;border:0;font-weight:600;transition:transform .18s ease,box-shadow .18s ease,opacity .18s}
+.btn.primary{background:linear-gradient(90deg,var(--accent),#5b21b6);box-shadow:0 12px 30px rgba(92,45,186,0.18)}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+.btn:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(92,45,186,0.16)}
 
-.hero-image img{max-width:420px;border-radius:12px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+/* Copy button next to code sample */
+.copy-btn{margin-left:12px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:6px 10px;border-radius:8px;cursor:pointer;transition:background .15s,transform .12s}
+.copy-btn:hover{background:rgba(255,255,255,0.02);transform:translateY(-2px)}
 
-.features{padding:48px 0;background:linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.02) 100%)}
+.hero-image{width:460px;flex:0 0 460px;display:flex;align-items:center;justify-content:center}
+.illustration{width:380px;height:260px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));display:flex;align-items:center;justify-content:center;box-shadow:0 10px 40px rgba(2,6,23,0.6);transition:transform .5s ease}
+.illustration:hover{transform:translateY(-6px) rotate(-1deg)}
+
+.features{padding:40px 0;margin-top:12px}
 .features h2{color:#dbeafe;margin-bottom:18px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.card{background:rgba(255,255,255,0.02);padding:18px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
-.card h3{margin:0 0 8px}
-.card p{margin:0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);transition:transform .18s ease,box-shadow .18s ease}
+.card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(2,6,23,0.5)}
+.card h3{margin:0 0 8px;font-size:16px}
+.card p{margin:0;color:var(--muted);font-size:14px}
 
-.site-footer{padding:28px 0;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02)}
+/* Reveal animation for scroll */
+.reveal{opacity:0;transform:translateY(12px) scale(.995);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.9,.2,1)}
+.reveal.visible{opacity:1;transform:none}
 
-@media (max-width:900px){
-  .hero-inner{flex-direction:column;align-items:flex-start}
+.code-sample{margin-top:18px;background:rgba(2,6,23,0.6);padding:14px;border-radius:8px;color:#cbd5e1;font-family:var(--font-mono);font-size:13px}
+
+.site-footer{padding:28px 0;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02);margin-top:36px}
+
+@media (max-width:1000px){
+  .hero-inner{flex-direction:column-reverse;align-items:flex-start}
+  .hero-image{width:100%;flex:0 0 auto;margin-bottom:18px}
   .grid{grid-template-columns:1fr}
 }
