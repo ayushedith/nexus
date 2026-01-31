@@ -46,13 +46,27 @@ func NewAPIServer(basePath, env, apiKey string) (*APIServer, error) {
 
 // RegisterRoutes registers HTTP handlers on the provided mux.
 func (s *APIServer) RegisterRoutes(mux *http.ServeMux) {
-    mux.HandleFunc("/api/collections", s.handleCollections)
-    mux.HandleFunc("/api/collections/get", s.handleGetCollection)
-    mux.HandleFunc("/api/collections/save", s.handleSaveCollection)
-    mux.HandleFunc("/api/run", s.handleRun)
-    mux.HandleFunc("/api/mock/add", s.handleMockAdd)
-    mux.HandleFunc("/api/ai/generate-body", s.handleAIGenerateBody)
+    mux.HandleFunc("/api/collections", s.corsWrap(s.handleCollections))
+    mux.HandleFunc("/api/collections/get", s.corsWrap(s.handleGetCollection))
+    mux.HandleFunc("/api/collections/save", s.corsWrap(s.handleSaveCollection))
+    mux.HandleFunc("/api/run", s.corsWrap(s.handleRun))
+    mux.HandleFunc("/api/mock/add", s.corsWrap(s.handleMockAdd))
+    mux.HandleFunc("/api/ai/generate-body", s.corsWrap(s.handleAIGenerateBody))
     mux.Handle("/metrics", metrics.Handler())
+}
+
+// corsWrap adds permissive CORS headers for local development and handles OPTIONS preflight.
+func (s *APIServer) corsWrap(h http.HandlerFunc) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        w.Header().Set("Access-Control-Allow-Origin", "*")
+        w.Header().Set("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+        w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        if r.Method == http.MethodOptions {
+            w.WriteHeader(http.StatusOK)
+            return
+        }
+        h(w, r)
+    }
 }
 
 func writeJSON(w http.ResponseWriter, v interface{}) {
