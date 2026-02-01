@@ -1,3 +1,90 @@
+# Nexus
+
+Nexus is a local first toolkit for running, mocking, and sharing API collections from your repository. It helps teams iterate faster by keeping HTTP requests as plain files, letting you run them with a CLI or a web UI, stand up private mock servers, and get optional AI assisted help for crafting payloads and assertions.
+
+This repository contains a Go backend (CLI and API) and a Nextjs frontend. The design favors local development, reproducible runs stored in git, and private environments for teams.
+
+**Highlights**
+- **Run collections locally**: execute YAML based request collections from the CLI or web UI.
+- **Private mock servers**: run isolated mocks for integration tests and local development.
+- **Team friendly**: store collections in your repo, review changes with git, and share runs with teammates.
+- **AI assisted**: optional OpenAI adapter to generate example bodies and assertions.
+
+**Layout**
+- **[cmd/nexus](cmd/nexus)**: Go CLI and server entrypoint.
+- **[pkg](pkg)**: core libraries — AI adapters, collection runner, http helpers, mock server.
+- **[web](web)**: Nextjs frontend (UI, landing page, editor, Monaco integration).
+
+**Quick start (development)**
+
+Prerequisites:
+- Go 1.20+ (required to run the backend locally)
+- Node 16+ / npm or pnpm (for the frontend)
+- Optional: `OPENAI_API_KEY` if you want AI features
+
+Backend (from repository root):
+
+```bash
+# build and run the API server
+go build -o bin/nexus ./cmd/nexus
+./bin/nexus server
+
+# or run directly during development
+go run ./cmd/nexus server
+```
+
+Frontend (from `web`):
+
+```bash
+cd web
+npm install
+npm run dev      # starts Nextjs dev server on port 3000
+
+# production build
+npm run build
+npm run start
+```
+
+The frontend expects a backend URL during development. See `web/.env.local` for the `NEXT_PUBLIC_BACKEND_URL` and `NEXT_PUBLIC_WS_URL` environment variables.
+
+Environment variables
+- **OPENAI_API_KEY**: optional. Enables AI assisted helpers in the UI and CLI where configured.
+- **NEXT_PUBLIC_BACKEND_URL**: frontend URL for API requests (default: `http://localhost:8080`).
+- **NEXT_PUBLIC_WS_URL**: frontend WebSocket URL for realtime features.
+
+Running a sample collection
+
+There are example collections in `examples/collections`. From the repository root you can try:
+
+```bash
+nexus run examples/collections/demo.yaml
+```
+
+When running locally via the CLI or UI you will see request and response details, timings, and test results when assertions are present.
+
+Development notes
+- The project is split to keep UI and backend concerns separated. The CLI (`cmd/nexus`) can serve the frontend static build if you prefer a single binary deployment.
+- The backend includes a permissive CORS wrapper for local development; tighten CORS in production.
+- The AI code is abstracted behind an `AIClient` interface — adapters include an OpenAI adapter. Keep keys out of source control and use env vars.
+
+Docker
+
+There is a Dockerfile scaffold for building the backend image. Example build:
+
+```bash
+docker build -t nexus:local .
+docker run --env OPENAI_API_KEY=$OPENAI_API_KEY -p 8080:8080 nexus:local
+```
+
+Contributing
+- Use the existing unit tests and linters. Run `golangci-lint` for Go linting.
+- Add new collections to `examples/collections` and include tests when appropriate.
+
+Contact and license
+- Repo: https://github.com/ayushedith/nexus
+- License: MIT
+
+Enjoy — if you want, I can also add a short onboarding script that sets up env files and runs the frontend and backend in parallel locally.
 # NEXUS-API
 
 ![Nexus](assets/nexus.jpg)
