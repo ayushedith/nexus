@@ -28,7 +28,7 @@ export default function Landing() {
     try {
       navigator.clipboard.writeText('nexus run examples/collections/demo.yaml')
       // friendly small feedback
-      alert('Copied! You can paste and run that in your terminal.')
+      alert('Copied to clipboard!')
     } catch {
       alert('Could not copy. You can select and copy manually.')
     }
